@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html >
+<head>
+    
+    <title>Generate QR Code</title>
+    <script src="./scripts/qrcode.min.js" type="text/javascript"></script>
+    <script src="../jquery/1.11.3/jquery.min.js"></script>
+    
+    <script>
+        let g_QRCode = null;
+        window.onload = window_onload; 
+
+        function window_onload(){
+            regEvents();
+            init();
+        }
+
+        function init() {
+            let eQRCode = document.getElementById("divQRCode");
+            const config ={
+                width: 400,
+                height: 400
+            };
+
+            g_QRCode =new QRCode(
+                eQRCode,
+                config
+            );
+
+            //pure JavaScript syntax
+            //document.getElementById("txtUrl").value = "https://hongphucdn.com";
+            //jquery syntax
+            $("#txtUrl").val("https://hongphucdn.com?param1=qrcode&pram2=test&param3=test3");
+            
+            $("#txtUrl").focus();
+        }
+        
+        function makeCode(){
+            if(g_QRCode === null){
+                return;
+            }
+
+            const sUrl =$("#txtUrl").val();
+            if(sUrl === undefined || sUrl === ""){
+                alert("Please enter a valid URL");
+                $("#txtUrl").focus();
+                return;
+            }
+
+            g_QRCode.makeCode(sUrl);
+        }
+
+        function regEvents()
+        {
+            // document.getElementById("txtUrl").addEventListener("keydown",function(e){
+            //     if(e.keyCode == 13){
+            //         e.preventDefault();
+            //         makeCode();
+            //     }
+            // });
+
+            $("#txtUrl").on("change", function(e){
+                e.preventDefault();
+                makeCode();
+            })
+
+            $("#txtUrl").on("keydown",function(e){
+                if(e.keyCode == 13){
+                    e.preventDefault();
+                    makeCode();
+                }
+            })
+
+        }
+    </script>
+</head>
+<body>
+    <input id="txtUrl" type="text" style="width: 700px;">
+    <br/><div id="divQRCode" style="width: 400px; height: 400px;"> </div>
+</body>
+</html>
